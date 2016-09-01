@@ -15,7 +15,7 @@ public class ShipScript : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("LETS HIT!!");
+        
         
     }
 }
