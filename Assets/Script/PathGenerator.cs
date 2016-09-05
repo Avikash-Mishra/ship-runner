@@ -26,10 +26,19 @@ public class PathGenerator : MonoBehaviour {
         if (playerPosition.z > (zPosEnd - 15)) {
             switch (currentPath) {
                 case 1:
-                    generateZigZagPath();
+                    generateRandomPath();
                     currentPath = 2;
                     break;
                 case 2:
+                    generateZigZagPath();
+                    currentPath = 3;
+                    break;
+                case 3:
+                    generateRandomPath();
+                    currentPath = 4;
+                    break;
+                case 4:
+                    CameraScript.movementSpeed += 10;
                     generateStraightPath();
                     currentPath = 1;
                     break;
@@ -39,17 +48,23 @@ public class PathGenerator : MonoBehaviour {
     }
 
     public void generateStraightPath() {
-        pathWidth = 7;
+        pathWidth = 10;
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
 
         float playerX = playerPosition.x;
-        float playerZ = zPosEnd;
-        float playerY = 0;
+        float playerZ = zPosEnd + 20;
+        float playerY = 1f;
 
         float posZ = playerZ;
         float posX = playerX;
-        float posY = 0;
+        float posY = playerY;
+        float distance = 0;
+        for(int i = 0; i < 100; i++) {
+            GameObject pathBlockRight = Instantiate(block, new Vector3(posX + pathWidth - offSet + distance, posY, posZ), Quaternion.identity) as GameObject;
+            GameObject pathBlockLeft = Instantiate(block, new Vector3(posX - pathWidth - offSet - distance, posY, posZ), Quaternion.identity) as GameObject;
+            distance += cubeDistance;
+        }
         for (int i = 0; i < Constants.WORLD.blockLengthPathStart; i++) {
             posZ += cubeDistance;
 
@@ -67,11 +82,11 @@ public class PathGenerator : MonoBehaviour {
 
         float playerX = playerPosition.x;
         float playerZ = zPosEnd;
-        float playerY = 0;
+        float playerY = 1f;
 
-        float posZ = playerZ;
+        float posZ = playerZ + 10;
         float posX = playerX;
-        float posY = 0;
+        float posY = playerY;
 
         //going stright
         for (int i = 0; i < 15; i++) {
@@ -98,5 +113,28 @@ public class PathGenerator : MonoBehaviour {
         }
         zPosEnd = posZ;
 
+    }
+
+    public void generateRandomPath() {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
+
+        float playerX = playerPosition.x;
+        float playerZ = zPosEnd + 5;
+        float playerY = 1f;
+
+        float posZ = playerZ;
+        float posX = playerX;
+        float posY = playerY;
+        var zOffset = 0;
+        for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < 40; i++) {
+                var startX = Random.Range(posX - 60, posX + 60);
+                var startZ = Random.Range(posZ + 5, posZ + 40) +zOffset;
+                GameObject star = Instantiate(block, new Vector3(startX, posY, startZ), Quaternion.identity) as GameObject;
+                zPosEnd = startZ;
+            }
+            zOffset += 20;
+        }
     }
 }

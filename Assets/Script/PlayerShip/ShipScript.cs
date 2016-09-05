@@ -10,7 +10,7 @@ public class ShipScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.Rotate(0, 0, -Input.gyro.rotationRateUnbiased.z);
+        transform.Rotate(0, -Input.gyro.rotationRateUnbiased.z, -Input.gyro.rotationRateUnbiased.z);
     }
 
     void OnCollisionEnter(Collision collision)
